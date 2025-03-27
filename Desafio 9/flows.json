@@ -1,0 +1,129 @@
+[
+    {
+        "id": "88e9ef53d1cc4bda",
+        "type": "tab",
+        "label": "Diogo",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6af55118d11fe7e0",
+        "type": "cloudantplus out",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "cloudant": "d18906f81c38456a",
+        "database": "diogo3database",
+        "service": "_ext_",
+        "payonly": true,
+        "operation": "insert",
+        "x": 360,
+        "y": 180,
+        "wires": [
+            [
+                "de0ecabaec33bbf5"
+            ]
+        ]
+    },
+    {
+        "id": "71d666abf2cdb34a",
+        "type": "http in",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "url": "/redhatPost",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 180,
+        "wires": [
+            [
+                "d745816841d3e878"
+            ]
+        ]
+    },
+    {
+        "id": "de0ecabaec33bbf5",
+        "type": "http response",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 550,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6cd23902e83c6c2b",
+        "type": "http in",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "url": "/redhatget",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 280,
+        "wires": [
+            [
+                "369637e74dd0fa84"
+            ]
+        ]
+    },
+    {
+        "id": "4cca4f75d85f0042",
+        "type": "http response",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 570,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "369637e74dd0fa84",
+        "type": "cloudantplus in",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "cloudant": "d18906f81c38456a",
+        "database": "diogo3database",
+        "service": "_ext_",
+        "search": "_all_",
+        "design": "",
+        "index": "",
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "4cca4f75d85f0042"
+            ]
+        ]
+    },
+    {
+        "id": "d745816841d3e878",
+        "type": "split",
+        "z": "88e9ef53d1cc4bda",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 230,
+        "y": 80,
+        "wires": [
+            [
+                "6af55118d11fe7e0"
+            ]
+        ]
+    },
+    {
+        "id": "d18906f81c38456a",
+        "type": "cloudantplus",
+        "host": "https://f1c0dcf9-5075-4061-a1f8-2f4ca596058a-bluemix.cloudantnosqldb.appdomain.cloud",
+        "name": "primeiraCred",
+        "useapikey": true
+    }
+]
