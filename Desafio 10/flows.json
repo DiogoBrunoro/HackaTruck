@@ -1,0 +1,28 @@
+[
+    {
+        "id": "dee518a3ee98bc79",
+        "type": "cloudantplus in",
+        "z": "4e8f144b6da303cd",
+        "name": "",
+        "cloudant": "d18906f81c38456a",
+        "database": "database6diogo",
+        "service": "_ext_",
+        "search": "_all_",
+        "design": "",
+        "index": "",
+        "x": 380,
+        "y": 260,
+        "wires": [
+            [
+                "9b57ad3e2ae03874"
+            ]
+        ]
+    },
+    {
+        "id": "d18906f81c38456a",
+        "type": "cloudantplus",
+        "host": "https://f1c0dcf9-5075-4061-a1f8-2f4ca596058a-bluemix.cloudantnosqldb.appdomain.cloud",
+        "name": "primeiraCred",
+        "useapikey": true
+    }
+]
