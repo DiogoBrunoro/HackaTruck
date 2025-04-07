@@ -1,7 +1,13 @@
 import SwiftUI
+import GoogleGenerativeAI
 
 struct resultadoIMC: View {
     @Binding var imc: Double
+    let model = GenerativeModel(name: "gemini-1.5-flash", apiKey: APIKey.default)
+    @State var userPrompt = ""
+    @State var response = "How can I help you today?"
+    @State var isLoading = false
+    
     let genero: Genero
     
     var resultado: String {
@@ -27,39 +33,104 @@ struct resultadoIMC: View {
     }
     
     var body: some View {
-        ZStack{
+        ZStack {
             Color.backgroundColor1.edgesIgnoringSafeArea(.all)
-            VStack {
-                Image(imagem)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 350)
-                
-                Text("O seu resultado de IMC é: **\(String(format: "%.2f", imc))**")
-                    .font(.title2)
-                    .foregroundStyle(.black)
-                
-                Text(resultado)
-                    .font(.system(size: 60, weight: .bold, design: .rounded))
-                    .foregroundColor(.vermelhoRed)
-                
-                Spacer()
-                
-                Button {
-                    imc = 0
-                } label: {
-                    Text("Recalcular IMC")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .frame(maxWidth: .infinity)
+            ScrollView {
+                VStack {
+                    Image(imagem)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 350)
+                    
+                    Text("O seu resultado de IMC é: **\(String(format: "%.2f", imc))**")
+                        .font(.title2)
+                        .foregroundStyle(.black)
+                    
+                    Text(resultado)
+                        .font(.system(size: 60, weight: .bold, design: .rounded))
+                        .foregroundColor(.vermelhoRed)
+                    
+                    Spacer()
+                    
+                    ZStack {
+                        // Estilizando o texto da resposta
+                        VStack{
+                            HStack{
+                                Text("Dica Gemini")
+                                    .font(.custom("HelveticaNeue-Bold", size: 30))
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [.purple, .blue, .indigo]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                Image(systemName: "star.fill")
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [.purple, .blue, .indigo]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                            }
+                            Text(response)
+                                .font(.body)
+                                .foregroundColor(.black)
+                                .lineSpacing(8)
+                                .multilineTextAlignment(.leading)
+                                .padding()
+                                .background(Color.white.opacity(1))
+                                .cornerRadius(10)
+                                .shadow(radius: 10)
+                                .padding(.bottom,10)
+                            
+                            if isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .indigo))
+                            }
+                        }
+                    }
+                    
+                    Button {
+                        imc = 0
+                    } label: {
+                        Text("Recalcular IMC")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .cornerRadius(30)
+                    .controlSize(.large)
+                    .buttonStyle(.borderedProminent)
+                    .tint(.vermelhoRed)
                 }
-                .cornerRadius(30)
-                .controlSize(.large)
-                .buttonStyle(.borderedProminent)
-                .tint(.vermelhoRed)
+                .padding()
+                .onAppear {
+                    // Definindo o prompt com informações sobre o IMC
+                    userPrompt = "Meu IMC é \(imc) , por favor me dê dicas para eu ter uma boa alimentação e melhorar meu quadro de saúde, me dê uma resposta de até 5 linhas."
+                    generateResponse()
+                }
             }
-            .padding()
+        }
+    }
+    
+    func generateResponse() {
+        isLoading = true
+        response = ""
+        
+        Task {
+            do {
+                let result = try await model.generateContent(userPrompt)
+                isLoading = false
+                response = result.text ?? "No response found"
+                userPrompt = ""
+            } catch let error {
+                isLoading = false
+                response = "Algo deu errado: \(error.localizedDescription)"
+                print("Erro ao gerar resposta: \(error)")
+            }
         }
     }
 }

@@ -24,7 +24,15 @@ struct ContentView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
-                     Text("HeartBit")
+                     Text("IMC")
+                }
+            FormView()
+                .tabItem{
+                    Image(systemName: "list.bullet.clipboard.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                     Text("Ficha Médica")
                 }
                 
         }.accentColor(.black)
